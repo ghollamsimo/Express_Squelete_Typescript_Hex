@@ -22,7 +22,7 @@ class UserController {
             const user = await this.userUseCase.register( name, email, password );
             res.status(200).json(user);
         } catch (error) {
-            res.status(401).json({ message: error });
+            res.status(401).json({ message: 'Invalid username or password' });
         }
     }
 
