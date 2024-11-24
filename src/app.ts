@@ -1,7 +1,8 @@
 import express, { Application, Request, Response, NextFunction } from "express";
-import router from "./routes/routes";
 import dotenv from "dotenv";
 import connectToDB from "./config/settings";
+import authRouter from "./routes/auth.route";
+import tagRouter from "./routes/tag.router";
 
 dotenv.config();
 
@@ -17,15 +18,13 @@ class Server {
     }
 
     private config(): void {
-        this.app.use((req: Request, res: Response, next: NextFunction) => {
-            next();
-        });
         this.app.use(express.urlencoded({ extended: true }));
         this.app.use(express.json());
     }
 
     private routing(): void {
-        this.app.use("/", router);
+        this.app.use("/", authRouter);
+        this.app.use("/tag", tagRouter);
     }
 
     public async start(): Promise<void> {
@@ -36,7 +35,10 @@ class Server {
     }
 }
 
-// Export an instance of Server for testing
-const server = new Server();
-export const app = server.app; // Export app for tests
-export default server;
+export const app = new Server().app;
+
+if (process.env.NODE_ENV !== "test") {
+    new Server().start();
+}
+
+export default new Server();
