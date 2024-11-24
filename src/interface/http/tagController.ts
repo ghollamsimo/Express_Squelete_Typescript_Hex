@@ -14,7 +14,7 @@ export class TagController {
         try {
             const { name } = req.body;
             if (!name) {
-                return res.status(400).json({ success: false, message: "Name is required" });
+                return res.status(400).json({ success: false, message: "Name is required" })
             }
             const tagDTO: TagDTO = new TagDTO(name);
             const tag: TagEntity = await this.tagUseCase.store(tagDTO);
